@@ -174,4 +174,22 @@ caret::R2(model2CV_Pred , testSet$price)
 caret::RMSE(model1CV_Pred , testSet$price)
 caret::RMSE(model2CV_Pred , testSet$price)
 
-model2CV
+minbudget = readline(); 
+maxbudget = readline(); 
+
+age_rule <- function(date_left , date_right){
+  
+  if(date_left < date_right){
+  }else{
+    cat("non valid date")
+  }
+  
+}
+
+date_left = readline();
+date_right = readline();
+
+
+age_h <- (curr_yr - built_yr)
+library(dplyr)
+house %>% filter(between(price, minbudget, minbudget) & between(yr_built, date_left, date_right))
