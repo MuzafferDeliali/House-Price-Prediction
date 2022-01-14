@@ -1,6 +1,9 @@
-### Regression Application ###
+library(readr)
+house <- read_csv("C:/Users/Muzaffer/Desktop/Veri_Bilimi/SourceForUdemy/DataSets/kc_house_data.csv")
+View(house)
 
-## Regression Application 1 - Separation of Train and Test ####
+
+## Separation of Train and Test ####
 
 model_data <- house[c("price" , "sqft_living")]
 
@@ -15,7 +18,7 @@ testSet <- model_data[-sampleIndex , ]
 nrow(trainSet)
 nrow(testSet)
 
-## Regression Application 2 - Examination of trainSet and Checking Outliers ####
+## Examination of trainSet and Checking Outliers ####
 cor(trainSet) # There is a positive correlation and it's 0.69
 
 hist(trainSet$price)
@@ -28,7 +31,8 @@ library(ggplot2)
 fig <- ggplot(data = trainSet , aes(x = sqft_living , y = price)) +
         geom_point(size = 2) +
         xlab("Sqft Living") + ylab("Prices")
-fig
+
+fig # Scatter plot
 # Even thought our outliers has correlation we have to remove them from data set
 # But we don't have enough data at extreme values and that's the reason of removing
 
@@ -60,7 +64,7 @@ library(mice)
 md.pattern(trainSet)
 # If we were have missing values at beginning we would use imputation of missing values
 
-## Regression Application 3 - Modelling and Estimation ####
+## Modelling and Estimation ####
 
 model1 <- lm(price ~sqft_living , data = trainSet)
 model2 <- lm(price ~sqft_living , data = trainSetRemovedOutliers)
@@ -74,7 +78,7 @@ AIC(model2)
 BIC(model2)
 
 summary(model1) # Estimated value per sqft_living 280
-## Regression Application 4 - Valuation on Data Set ####
+## Valuation on Data Set ####
 
 # Prediction 
 
@@ -96,7 +100,7 @@ mse2 <- sum(model2_err^2) / nrow(model2PredData)
 sqrt(mse1);sqrt(mse2) # model1 has lower error value
 # which it was the one who outliers are not removed
 
-## Regression Application 5 - R2, MSE and MAE ####
+## Regression Application R2, MSE and MAE ####
 
 # We use these metrics to calculate errors so we can pick whom fit us
 
@@ -115,9 +119,8 @@ RMSE(model2PredData$predictions , model2PredData$actuals)
 MAE(model1PredData$predictions , model1PredData$actuals)
 MAE(model2PredData$predictions , model2PredData$actuals)
 
-## Regression Application 6 - Min - Max Accuracy ####
+## Min - Max Accuracy ####
 
-# Min - Max Accuracy
 
 model1MinMaxAccur <- mean(apply(model1PredData , 1 , min) / apply(model1PredData , 1 , max)) # Model 1 Accuracy Rate 
 model1MinMaxAccur
@@ -127,9 +130,8 @@ model2MinMaxAccur
 
 # So, according to this they're not much different than each other but model 2 is more accurate
 
-## Regression Application 7 - Mean Absolute Percentage Error (MAPE) ####
+##  Mean Absolute Percentage Error (MAPE) ####
 
-# Mean Absolute Percentage Error (MAPE)
 # It's similar to the MAE but on MAPE the results are percentage
 
 model1MAPE <- mean(abs(model1PredData$actuals - model1PredData$predictions) /
@@ -141,14 +143,13 @@ model2MAPE <- mean(abs(model2PredData$actuals - model2PredData$predictions) /
 model1MAPE;model2MAPE # second one has less error value which it means last one is more accurate
 # model 2 has %68 accurate
 
-## Regression Application 8 - Choosing Model ####
+## Choosing Model ####
 
 # Most of time second model has better result so we will choose model 2
 # But the difference isn't much, we can choose model 1 tho 
 # Depending on the results we can try other samples and pick other model
 
-## Regression Application 9 - k-Fold Cross Validation #### 
-
+## k-Fold Cross Validation #### 
 
 library(caret)
 train.control <- trainControl(method = "cv" , number = 10 , verboseIter = TRUE) # CV stands for cross validation
@@ -172,3 +173,5 @@ caret::R2(model2CV_Pred , testSet$price)
 
 caret::RMSE(model1CV_Pred , testSet$price)
 caret::RMSE(model2CV_Pred , testSet$price)
+
+model2CV
