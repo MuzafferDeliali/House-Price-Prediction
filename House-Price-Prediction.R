@@ -21,8 +21,25 @@ nrow(testSet)
 ## Examination of trainSet and Checking Outliers ####
 cor(trainSet) # There is a positive correlation and it's 0.69
 
-hist(trainSet$price)
-hist(trainSet$sqft_living)
+par(mfrow=c(1,2))
+
+hist(trainSet$price,
+     main = "Price Freq" ,
+     xlab = "Price")
+
+hist(trainSetRemovedOutliers$price,
+     main = "Price Freq Without Outlier" ,
+     xlab = "Price")
+
+
+hist(trainSet$sqft_living,
+     main = "Sqft freq" ,
+     xlab = "Sqft")
+
+hist(trainSetRemovedOutliers$sqft_living,
+     main = "Sqft Freq Without Outlier" ,
+     xlab = "Sqft")
+
 #There are outliers we have to  do normalization
 
 # But first we have to do correlation graph
@@ -104,7 +121,7 @@ sqrt(mse1);sqrt(mse2) # model1 has lower error value
 
 # We use these metrics to calculate errors so we can pick whom fit us
 
-install.packages("caret")
+#install.packages("caret")
 library(caret)
 
 #R2 (R Squared)
@@ -120,7 +137,6 @@ MAE(model1PredData$predictions , model1PredData$actuals)
 MAE(model2PredData$predictions , model2PredData$actuals)
 
 ## Min - Max Accuracy ####
-
 
 model1MinMaxAccur <- mean(apply(model1PredData , 1 , min) / apply(model1PredData , 1 , max)) # Model 1 Accuracy Rate 
 model1MinMaxAccur
@@ -185,11 +201,12 @@ age_rule <- function(date_left , date_right){
   }
   
 }
-
 date_left = readline();
 date_right = readline();
 
+md.pattern(house2)
+house2 <- na.omit(house)
 
-age_h <- (curr_yr - built_yr)
 library(dplyr)
-house %>% filter(between(price, minbudget, minbudget) & between(yr_built, date_left, date_right))
+house2 %>% filter(between(price, minbudget, maxbudget), between(yr_built, date_left, date_right))
+View(sor1)
