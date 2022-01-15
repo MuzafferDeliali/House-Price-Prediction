@@ -33,7 +33,7 @@ hist(trainSetRemovedOutliers$price,
 
 
 hist(trainSet$sqft_living,
-     main = "Sqft freq" ,
+     main = "Sqft Freq" ,
      xlab = "Sqft")
 
 hist(trainSetRemovedOutliers$sqft_living,
@@ -204,9 +204,5 @@ age_rule <- function(date_left , date_right){
 date_left = readline();
 date_right = readline();
 
-md.pattern(house2)
-house2 <- na.omit(house)
-
 library(dplyr)
-house2 %>% filter(between(price, minbudget, maxbudget), between(yr_built, date_left, date_right))
-View(sor1)
+house %>% filter(between(price, minbudget, maxbudget), between(yr_built, date_left, date_right))
