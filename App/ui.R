@@ -3,6 +3,9 @@
 library(ggplot2)
 library(shiny)
 library(shinyWidgets)
+library(readr)
+
+house <- read_csv("C:/Users/Muzaffer/Desktop/Veri_Bilimi/SourceForUdemy/DataSets/kc_house_data.csv")
 
 fluidPage(
   titlePanel("Basic DataTable"),
@@ -13,7 +16,7 @@ fluidPage(
            selectInput("bed",
                        "Bedrooms:",
                        c("All",
-                         unique(as.character(house$bedrooms))))
+                         order(unique(as.character(house$bedrooms)))))
     ),
     column(4,
            selectInput("cond",
@@ -29,10 +32,22 @@ fluidPage(
     ),
     column(4,
            numericRangeInput('yr_Range',
-                          label = 'Date range input: yyyy-mm-dd',
-                          value = c(1900,2020)
+                             label = 'Date range input: yyyy-mm-dd',
+                             value = c(2020,1900))
+    ),
+    column(4,
+           selectInput("ren",
+                       "renovated:",
+                       c("Any","Yes","No"))
+    ),
+    
+    mainPanel(
+      tabsetPanel(
+        tabPanel("Plot", plotOutput("plot")), 
+        tabPanel("Summary", verbatimTextOutput("summary")), 
+        tabPanel("Table", DT::dataTableOutput("table"))
+      )
     )
-  ),
-  # Create a new row for the table.
-  DT::dataTableOutput("table")
-))
+  )
+)
+
