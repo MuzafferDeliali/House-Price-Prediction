@@ -16,11 +16,29 @@ function(input, output) {
     if (input$grd != "All") {
       data <- data[house$grade == input$grd,]
     }
-    if (input$yr_Range != "ALL") {
+    if (input$yr_Range != "All") {
       data <- data[house$yr_built == input$yr_Range,]
     }
+    if (input$ren == "Any") {data <- house}
+    
+      else if (input$ren != "Any" & input$ren == "Yes") {
+      inds <- which( house$yr_renovated == '0') 
+      data <- house[-inds , ]
+      
+    } else if (input$ren != "Any" & input$ren == "No") {
+      inds <- which( house$yr_renovated == '0') 
+      data <- house[inds , ]
+    }
+    
+
       
     data
   }))
+  output$plot <- renderPlot({
+    data <- ggplot(data = house , aes(x = sqft_living , y = cond)) +
+      geom_point(size = 2) +
+      xlab("Sqft Living") + ylab("Prices")
+  })
+  
   
 }
